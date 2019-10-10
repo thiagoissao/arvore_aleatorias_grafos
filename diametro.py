@@ -1,23 +1,33 @@
+# -*- coding: utf-8 -*-
 BRANCO = "branco"
 CINZA = "cinza"
 PRETO = "preto"
 
 def bfs(G, s):
     initialState = {
-        "d": float("inf"),
-        "pi": None,
-        "cor":BRANCO,
-        "adj": []
+        'd': float("inf"),
+        'pi': None,
+        'cor':BRANCO,
+        'adj': None
     }
     GAux = G
     for index,vertex in enumerate(G):
         adj = vertex
-        vertex = initialState
-        vertex['adj'] = adj
-        GAux[index] = vertex
+        print(adj)
+        GAux[index] = initialState
+        GAux[index]['adj'] = adj
     GAux[s]['d'] = 0
     GAux[s]['pi'] = None
     GAux[s]['cor'] = CINZA
+    ############## TÁ COLOCANDO O ÚLTIMO VALOR DE G EM TODOS OS ELEMENTOS DE GAUX E EU NÃO SEI PQ TNC
+    print(GAux[0])
+    print(GAux[1])
+    print(GAux[2])
+    print(GAux[3])
+    print(GAux[4])
+    print(GAux[5])
+    print(GAux[6])
+    print(GAux[7])
     q = [] #Pilha Vazia
     q.append(GAux[s])
     while q != []:
@@ -29,9 +39,7 @@ def bfs(G, s):
                 GAux[v][cor] = CINZA
                 q.append(GAux[v])
         u['cor'] = PRETO #ARRUMAR, NÃO DEVEMOS SETAR O VALOR DO u E SIM GAux[v]
-
-    print(GAux)
-
+    
 
 
 def teste_bfs():
