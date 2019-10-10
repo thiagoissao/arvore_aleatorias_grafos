@@ -23,6 +23,13 @@ def teste_bfs():
         [u,x]]
     
     d = bfs(G, G[0])
+    assert d[r] == 1
     assert d[s] == 0
+    assert d[t] == 2
+    assert d[u] == 3
+    assert d[v] == 2
+    assert d[w] == 1
+    assert d[x] == 2
+    assert d[y] == 3
 
 teste_bfs()
