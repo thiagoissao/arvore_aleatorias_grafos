@@ -4,14 +4,15 @@ const CINZA = 'cinza'
 const PRETO = 'preto'
 
 const diametro = (G) => {
-    let a, b, dis1, dis2;
-    dis1 = bfs(G, 0)
-    b = dis1.indexOf(Math.max(...dis1))
-    dis2 = bfs(G, b)
-    console.log(dis2)
-    return Math.max(...dis1) > Math.max(...dis2) ? Math.max(...dis1) : Math.max(...dis2);
+    const s = Math.round(Math.random() * (G.length - 1))
+    const a = bfs(G, s).reduce((number1, number2) => {
+        return Math.max(number1, number2)
+    })
+    const b = bfs(G,a).reduce((number1, number2) => {
+        return Math.max(number1, number2)
+    })
+    return a > b ? a:b
 }
-
 
 // //      0
 // //    /   \  
@@ -21,23 +22,21 @@ const teste_diametro = () => {
     let a = 0;
     let b = 1;
     let c = 2;
-    let G = [
+    const G = [
         [b,c],
         [a],
         [a]
     ]
     let dis = diametro(G)
-    console.log(dis);
-    // assert (dis == 2);
+    assert (dis == 2);
 }
 
 
 const bfs = (G, s) => {
-    let GAux = G
-    let aux = 0
-    GAux.forEach((vertex, i) => {
-        let adj = vertex
-        GAux[i] = {
+    let GAux = Object.assign({}, G)
+    Object.keys(GAux).forEach( index => {
+        let adj = G[index]
+        GAux[index] = {
             'd': Number.POSITIVE_INFINITY,
             'pi': null,
             'cor': BRANCO,
@@ -46,7 +45,7 @@ const bfs = (G, s) => {
     })
     GAux[s].d = 0
     GAux[s].pi = null
-    GAux[s].cor = CINZA 
+    GAux[s].cor = CINZA
     let pilha = [] //Inicialização da pilha
     pilha.push(GAux[s])
     while (pilha.length != 0) {
@@ -54,14 +53,14 @@ const bfs = (G, s) => {
         u.adj.forEach( v => {
             if(GAux[v].cor === BRANCO) {
                 GAux[v].d = u.d + 1
-                GAux[v].pi = GAux.indexOf(u)
+                GAux[v].pi = G.indexOf(u.adj)
                 GAux[v].cor = CINZA
                 pilha.push(GAux[v])
             }
         }) 
         u.cor = PRETO
     }
-    return GAux.map(vertex => vertex = vertex.d)
+    return Object.keys(GAux).map(index => GAux[index].d)
 }
 
 const teste_bfs = () => {
@@ -73,7 +72,7 @@ const teste_bfs = () => {
     let w = 5
     let x = 6
     let y = 7
-    let G = [
+    const G = [
         [s,v],
         [r,w],
         [u,w,x,y],
@@ -83,6 +82,7 @@ const teste_bfs = () => {
         [w,t,u,y],
         [u,x]
     ]
+
     let d = bfs(G, 1)
     assert (d[r] == 1)
     assert (d[s] == 0)
@@ -95,5 +95,5 @@ const teste_bfs = () => {
     
 }
 
-// teste_bfs()
+teste_bfs()
 teste_diametro();
