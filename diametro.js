@@ -14,21 +14,38 @@ const diametro = (G) => {
     return a > b ? a:b
 }
 
-// //      0
-// //    /   \  
-// //  1      2
-
 const teste_diametro = () => {
-    let a = 0;
-    let b = 1;
-    let c = 2;
+    let a = 0
+    let b = 1
+    let c = 2
+    let d = 3
+    let e = 4
+    let f = 5
+    let g = 6
+    let h = 7
     const G = [
-        [b,c],
-        [a],
-        [a]
+        [b,c],                     //       a
+        [a],                       //     /   \  
+        [a]                        //   b      c
     ]
+    const G2 = [
+        [a]                        //       a
+    ]
+    const G3 = [
+        [b,c],                      //          a
+        [a,e,d],                    //         /  \
+        [a,f],                      //        b    c
+        [b],                        //       / \     \
+        [b],                        //      e   d     f
+        [c,g],                      //                 \ 
+        [f],                        //                  g
+    ]                                           
     let dis = diametro(G)
-    assert (dis == 2);
+    let dis2 = diametro(G2)
+    let dis3 = diametro(G3)
+    assert (dis == 2)
+    assert (dis2 == 0)
+    assert (dis3 == 5)
 }
 
 
@@ -73,7 +90,7 @@ const teste_bfs = () => {
     let x = 6
     let y = 7
     const G = [
-        [s,v],
+        [s,v],                
         [r,w],
         [u,w,x,y],
         [t,x,y],
@@ -82,8 +99,17 @@ const teste_bfs = () => {
         [w,t,u,y],
         [u,x]
     ]
-
+    const G2 = [
+        [s,v],                  //      r
+        [r,t,u],                //     / \
+        [w,s],                  //    v   s
+        [s],                    //       / \
+        [r],                    //      t   u
+        [t]                     //     /
+    ]                           //    w
     let d = bfs(G, 1)
+    let d1 = bfs(G2, 0)    
+
     assert (d[r] == 1)
     assert (d[s] == 0)
     assert (d[t] == 2)
@@ -93,7 +119,14 @@ const teste_bfs = () => {
     assert (d[x] == 2)
     assert (d[y] == 3)
     
+    assert(d1[r] == 0)
+    assert(d1[s] == 1)
+    assert(d1[t] == 2)
+    assert(d1[u] == 2)
+    assert(d1[v] == 1)
+    assert(d1[w] == 3)
+
 }
 
 teste_bfs()
-teste_diametro();
+teste_diametro()
