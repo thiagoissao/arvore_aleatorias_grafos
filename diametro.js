@@ -3,24 +3,23 @@ const BRANCO = 'branco'
 const CINZA = 'cinza'
 const PRETO = 'preto'
 
+const r = 0
+const s = 1
+const t = 2
+const u = 3 
+const v = 4
+const w = 5
+const x = 6
+const y = 7
 
-let r = 0
-let s = 1
-let t = 2
-let u = 3 
-let v = 4
-let w = 5
-let x = 6
-let y = 7
-
-let a = 0
-let b = 1
-let c = 2
-let d = 3
-let e = 4
-let f = 5
-let g = 6
-let h = 7
+const a = 0
+const b = 1
+const c = 2
+const d = 3
+const e = 4
+const f = 5
+const g = 6
+const h = 7
 
 const diametro = (G) => {
     const s = Math.round(Math.random() * (G.length - 1))
@@ -30,18 +29,10 @@ const diametro = (G) => {
     const b = bfs(G,a).reduce((number1, number2) => {
         return Math.max(number1, number2)
     })
-    return a > b ? a:b
+    return b > a ? b:a
 }
 
 const teste_diametro = () => {
-    let a = 0
-    let b = 1
-    let c = 2
-    let d = 3
-    let e = 4
-    let f = 5
-    let g = 6
-    let h = 7
     const G = [
         [b,c],                     //       a
         [a],                       //     /   \  
@@ -59,9 +50,10 @@ const teste_diametro = () => {
         [c,g],                      //                 \ 
         [f],                        //                  g
     ]                                           
-    let dis = diametro(G)
-    let dis2 = diametro(G2)
-    let dis3 = diametro(G3)
+    const dis = diametro(G)
+    const dis2 = diametro(G2)
+    const dis3 = diametro(G3)
+    
     assert (dis == 2)
     assert (dis2 == 0)
     assert (dis3 == 5)
@@ -82,16 +74,18 @@ const bfs = (G, s) => {
     GAux[s].d = 0
     GAux[s].pi = null
     GAux[s].cor = CINZA
-    let pilha = [] //Inicialização da pilha
-    pilha.push(GAux[s])
-    while (pilha.length != 0) {
-        let u = pilha.pop()
+    let fila = [] //Inicialização da fila
+    fila.push(GAux[s])
+    indexU = 0
+    while (indexU != G.length) {
+        let u = fila[indexU]
+        indexU++
         u.adj.forEach( v => {
             if(GAux[v].cor === BRANCO) {
                 GAux[v].d = u.d + 1
                 GAux[v].pi = G.indexOf(u.adj)
                 GAux[v].cor = CINZA
-                pilha.push(GAux[v])
+                fila.push(GAux[v])
             }
         }) 
         u.cor = PRETO
@@ -100,14 +94,6 @@ const bfs = (G, s) => {
 }
 
 const teste_bfs = () => {
-    let r = 0
-    let s = 1
-    let t = 2
-    let u = 3 
-    let v = 4
-    let w = 5
-    let x = 6
-    let y = 7
     const G = [
         [s,v],                
         [r,w],
@@ -146,6 +132,10 @@ const teste_bfs = () => {
     assert(d1[w] == 3)
 
 }
+
+// ===================== SEGUNDA PARTE ===================================
+// =======================================================================
+// =======================================================================
 
 const numero_arestas = (G) => {
     let contador = 0;
@@ -216,4 +206,4 @@ const eh_arvore = (G) => {
 
 teste_bfs()
 teste_diametro()
-teste_aresta()
+//teste_aresta()
