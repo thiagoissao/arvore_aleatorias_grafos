@@ -23,12 +23,8 @@ const h = 7
 
 const diametro = (G) => {
     const s = Math.round(Math.random() * (G.length - 1))
-    const a = bfs(G, s).reduce((number1, number2) => {
-        return Math.max(number1, number2)
-    })
-    const b = bfs(G,a).reduce((number1, number2) => {
-        return Math.max(number1, number2)
-    })
+    const a = bfs(G, s).reduce((number1, number2) => Math.max(number1, number2))
+    const b = bfs(G,a).reduce((number1, number2) => Math.max(number1, number2))
     return b > a ? b:a
 }
 
@@ -185,11 +181,28 @@ const teste_aresta = () => {
     assert(are4 == 2)
 }
 
-const random_tree_random_walk = (n) => {
-
+const random_tree_random_walk = n => {
+    let GAux = Object.assign({}, Array.apply(null, Array(n)))
+    Object.keys(GAux).forEach((index) => {
+        GAux[index] = {visitado: false, adj:Array()}
+    })
+    let u = Math.round(Math.random() * (n - 1))
+    GAux[u].visitado = true
+    let arestas = 0
+    while( arestas < n - 1){
+        let v = Math.round(Math.random() * (n -1))
+        if(!GAux[v].visitado){
+            GAux[v].adj.push(u)
+            GAux[u].adj.push(v)
+            GAux[v].visitado = true
+            arestas++
+        }
+        u = v
+    }
+    return Object.keys(GAux).map(index => GAux[index].adj)
 }
 
-const eh_arvore = (G) => {
+const eh_arvore = G => {
     const arestas = numero_arestas(G)
     if(arestas != (G.length - 1)){
         return false
@@ -203,7 +216,21 @@ const eh_arvore = (G) => {
     return true
 }
 
+const teste_arvore = () => {
+    const n = [250, 500, 2000]
+    n.forEach(number => {
+        let soma_diametro = 0
+        for(let i=0; i<500; i++) {
+            let G = random_tree_random_walk(number)
+            assert(eh_arvore(G))
+            soma_diametro = diametro(G)
+        }
+        let media = soma_diametro/500
+        console.log(media)
+    })
+}
 
 teste_bfs()
 teste_diametro()
-//teste_aresta()
+teste_aresta()
+teste_arvore()
