@@ -217,16 +217,16 @@ const eh_arvore = G => {
 }
 
 const teste_arvore = () => {
-    const n = [250, 500, 2000]
+    const n = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
     n.forEach(number => {
         let soma_diametro = 0
         for(let i=0; i<500; i++) {
             let G = random_tree_random_walk(number)
             assert(eh_arvore(G))
-            soma_diametro = diametro(G)
+            soma_diametro = soma_diametro + diametro(G)
         }
         let media = soma_diametro/500
-        console.log(media)
+        console.log(number + ' ' + media)
     })
 }
 
