@@ -64,10 +64,11 @@ const kruskal_graph_test = () => {
     mst_kruskal(G, w)
 }
 
-const make_set = e => {
+const make_set = (v ,e) => {
     return {
         E: e,
-        rank: 0
+        rank: 0,
+        p: v
     }
 }
 
@@ -80,12 +81,23 @@ const find_set = v => {
 
 const mst_kruskal = (G, w) => {
     let A = []
-    Object.keys(G).forEach( v => {
-        //console.log(v)
-        G[v] = make_set(G[v])
+    Object.keys(G).forEach( v => G[v] = make_set(v, G[v]))
+    const wTemp = Object.assign({}, w) 
+    Object.keys(w).forEach( v => {
+        w[v].sort((a,b) => {
+            if(b < a){
+                const iA = wTemp[v].indexOf(a)
+                let iB = wTemp[v].indexOf(b)
+                iB = iB == -1 ? iA + 1 : iB
+                const aux = G[v].E[iB]
+                G[v].E[iB] = G[v].E[iA]
+                G[v].E[iA] = aux
+            }
+           return a - b
+        })  
     })
     console.log(G)
-
+    console.log(w)
 
     // Object.keys(w).forEach( v => w[v].sort((a,b) => a - b))
     // console.log(G)
