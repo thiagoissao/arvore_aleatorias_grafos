@@ -60,28 +60,44 @@ const kruskal_graph_test = () => {
         [2, 6, 7]
     ]
 
-
     mst_kruskal(G, w)
 }
 
-const make_set = (v ,e) => {
+const make_set = (v, adj) => {
     return {
-        E: e,
+        E: adj,
         rank: 0,
         p: v
     }
 }
 
-const find_set = v => {
-    if(v != v.pai )
-        v.pai = find_set(v.pai)
-    return v.pai
+const find_set = (G,v) => {
+    if(G.indexOf(v) != v.p) v.p = find_set(G, G[v.p])
+    return v.p
 }
 
+const union = (x, y, G) => {
+    link(find_set(G, x), find_set(G, y), G)
+}
+
+const link = (x, y, G) => {
+    if(G[x].rank  > G[y].rank){
+        G[y].p = x
+    } else{
+        G[x].p = y
+        if(G[x].rank == G[y].rank){
+            G[y].rank += 1
+        }
+    }
+}
 
 const mst_kruskal = (G, w) => {
     let A = []
+
+    console.log(G)
     Object.keys(G).forEach( v => G[v] = make_set(v, G[v]))
+    console.log()
+    console.log(G)
     const wTemp = Object.assign({}, w) 
     Object.keys(w).forEach( v => {
         w[v].sort((a,b) => {
@@ -96,17 +112,24 @@ const mst_kruskal = (G, w) => {
            return a - b
         })  
     })
+    console.log()
     console.log(G)
-    console.log(w)
+    Object.keys(G).forEach(u => {
+        G[u].E.forEach(v => {
+            if(find_set(G, G[u]) != find_set(G, G[v])){
+                u = parseInt(u)
+                A.push([u,v])
+                union(G[u], G[v], G)
+            }
+        })
+        
+    })
+    console.log()
+    console.log(G)
 
-    // Object.keys(w).forEach( v => w[v].sort((a,b) => a - b))
-    // console.log(G)
-    // // Object.keys(G).forEach(v => {
-    // //     G[v].forEach(u => {
-    // //         console.log(find_set(u))
-    // //     })
-    // // })
-
+    console.log("\nRetorno: (ÁRVORE)")
+    console.log(A)
+    return A
 }
 
 kruskal_graph_test()
