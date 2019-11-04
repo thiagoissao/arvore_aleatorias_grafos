@@ -37,15 +37,15 @@ const kruskal_graph_test = () => {
     const i = 8
     
     const G = [
-        [b, h],
-        [a, c, h],
-        [b, d, i ,f],
-        [c, e, f],
-        [d, f],
-        [c, d, e, g],
-        [f, i, h],
-        [a, b, i, g],
-        [c, g, h],
+        [b, h],       //a
+        [a, c, h],      //b
+        [b, d, i ,f],   //c
+        [c, e, f],      //d
+        [d, f],         //e
+        [c, d, e, g],   //f
+        [f, i, h],  //g
+        [a, b, i, g],   //h
+        [c, g, h],  //i
     ]
 
     const w = [
@@ -71,14 +71,15 @@ const make_set = (v, adj) => {
     }
 }
 
-const find_set = (G,v) => {
-    if(G.indexOf(v) != v.p) v.p = find_set(G, G[v.p])
-    return v.p
-}
-
 const union = (x, y, G) => {
     link(find_set(G, x), find_set(G, y), G)
 }
+
+const find_set = (G,v) => {
+    if(v != G[v].p) G[v].p = find_set(G, G[v].p)
+    return G[v].p
+}
+
 
 const link = (x, y, G) => {
     if(G[x].rank  > G[y].rank){
@@ -93,7 +94,6 @@ const link = (x, y, G) => {
 
 const mst_kruskal = (G, w) => {
     let A = []
-
     console.log(G)
     Object.keys(G).forEach( v => G[v] = make_set(v, G[v]))
     console.log()
@@ -110,23 +110,33 @@ const mst_kruskal = (G, w) => {
                 G[v].E[iA] = aux
             }
            return a - b
-        })  
+        })
     })
     console.log()
     console.log(G)
+    let arestaOrdenada = []
     Object.keys(G).forEach(u => {
         G[u].E.forEach(v => {
-            if(find_set(G, G[u]) != find_set(G, G[v])){
-                u = parseInt(u)
-                A.push([u,v])
-                union(G[u], G[v], G)
+            u = parseInt(u)
+            if(u > v){
+                arestaOrdenada.push([w[u][G[u].E.indexOf(v)], u, v])
             }
         })
-        
     })
+    
+    arestaOrdenada.sort((a,b) => {
+        return a[0] - b[0]
+    })
+
+    for(let i = 0; i < arestaOrdenada.length; i ++){
+        if(find_set(G, arestaOrdenada[i][1]) != find_set(G, arestaOrdenada[i][2])){
+            A.push([arestaOrdenada[i][1], arestaOrdenada[i][2]])
+            union(arestaOrdenada[i][1], arestaOrdenada[i][2], G)
+        }
+    }
+
     console.log()
     console.log(G)
-
     console.log("\nRetorno: (ÁRVORE)")
     console.log(A)
     return A
