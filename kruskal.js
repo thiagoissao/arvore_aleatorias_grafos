@@ -135,14 +135,14 @@ const A = mst_kruskal(G, w)
 
 const createEdges = (current, n) => {
     let e = Array()
-    for(let i=0; i < n; i++)
+    for(let i=0; i <= n; i++)
         if(i != current) e.push(i)
     return e
 }
 
 const createWeights = (end) => {
     let w = Array()
-    for(let i=0; i < end - 1; i++) 
+    for(let i=0; i <= end - 1; i++) 
         w.push(Math.random())
     return w
 }
