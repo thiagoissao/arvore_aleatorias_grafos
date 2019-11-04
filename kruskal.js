@@ -135,14 +135,14 @@ const A = mst_kruskal(G, w)
 
 const createEdges = (current, n) => {
     let e = Array()
-    for(let i=0; i <= n; i++)
+    for(let i=0; i < n; i++)
         if(i != current) e.push(i)
     return e
 }
 
 const createWeights = (end) => {
     let w = Array()
-    for(let i=0; i <= end - 1; i++) 
+    for(let i=0; i < end - 1; i++) 
         w.push(Math.random())
     return w
 }
@@ -156,8 +156,10 @@ const randomTreeKruskal = n => {
 
     return mst_kruskal(G, w)
 }
-
+console.log("randomTreeKruskal -> n = 5: ")
 console.log(randomTreeKruskal(5))
+
+console.log("\nrandomTreeKruskal -> n = 10")
 console.log(randomTreeKruskal(10))
 
 kruskal_graph_test()
