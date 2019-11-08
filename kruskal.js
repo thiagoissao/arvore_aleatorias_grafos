@@ -154,6 +154,7 @@ const randomTreeKruskal = n => {
     const w = Array(n).fill(null)
     w.forEach((element, i) => w[i] = createWeights(n))
 
+    console.log(G)
     return mst_kruskal(G, w)
 }
 console.log("randomTreeKruskal -> n = 5: ")

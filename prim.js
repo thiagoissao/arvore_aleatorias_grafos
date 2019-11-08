@@ -1,17 +1,43 @@
+const extract_min = (Q, G) => {
+    let menor = Number.POSITIVE_INFINITY
+    Q.forEach( v => {
+        if(G[v].chave < menor ){
+            menor = v
+        }
+    })
+    Q.splice(G[menor], 1)
+    return menor
+}
+
+const belongsTo = (v, Q) => {
+    for(let i=0; i<Q.length; i++)
+        if(Q[i] == v) return true
+    return false
+}
+
 const mst_prim = (G, w, r) => {
     Object.keys(G).forEach(u => {
-        console.log(u)
         G[u] = {
-            adj: u,
+            adj: G[u],
             chave: Number.POSITIVE_INFINITY,
             pi: null
         }
     })
-    console.log(G)
-    r.chave = 0
+    G[r].chave = 0
     let Q = Object.keys(G)
-    console.log(Q)
-    
+    while(Q.length != 0){
+        const u = extract_min(Q, G)
+        G[u].adj.forEach((v, index) => {
+            
+            if(belongsTo(v, Q) && w[u][index] < G[v].chave){
+                console.log('('+ u + ',' + v+ ')' + ' => w = ' + w[u][index])
+                G[v].pi = u
+                G[v].chave = w[u][index]
+            }
+        })
+        console.log(G)
+    }
+
 }
 
 const test_mst_prim = () => {
@@ -48,6 +74,7 @@ const test_mst_prim = () => {
         [8, 11, 7, 1],
         [2, 6, 7]
     ]
-    mst_prim(G, w, Math.round(Math.random()*w.length))
+    mst_prim(G, w, 0)
+    // mst_prim(G, w, Math.round(Math.random()*(w.length - 1)))
 }
 test_mst_prim()
