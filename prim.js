@@ -1,11 +1,13 @@
 const extract_min = (Q, G) => {
     let menor = Number.POSITIVE_INFINITY
-    Q.forEach( v => {
+    let index = -1
+    Q.forEach( (v, i) => {
         if(G[v].chave < menor ){
             menor = v
+            index = i
         }
     })
-    Q.splice(G[menor], 1)
+    Q.splice(index, 1)
     return menor
 }
 
@@ -28,16 +30,22 @@ const mst_prim = (G, w, r) => {
     while(Q.length != 0){
         const u = extract_min(Q, G)
         G[u].adj.forEach((v, index) => {
-            
             if(belongsTo(v, Q) && w[u][index] < G[v].chave){
-                console.log('('+ u + ',' + v+ ')' + ' => w = ' + w[u][index])
+                // console.log('('+ u + ',' + v+ ')' + ' => w = ' + w[u][index])
                 G[v].pi = u
                 G[v].chave = w[u][index]
+
             }
         })
-        console.log(G)
     }
 
+    //CRIAR O VETOR DE ADJACENCIAS DA ÁRVORE E RETORNÁ-LA
+    let A = []
+    G.forEach((v,i) => {
+        if(v.pi != null){
+            console.log(v.pi) 
+        }
+    })
 }
 
 const test_mst_prim = () => {
@@ -74,7 +82,7 @@ const test_mst_prim = () => {
         [8, 11, 7, 1],
         [2, 6, 7]
     ]
-    mst_prim(G, w, 0)
-    // mst_prim(G, w, Math.round(Math.random()*(w.length - 1)))
+    // mst_prim(G, w, 0)
+    mst_prim(G, w, Math.round(Math.random()*(w.length - 1)))
 }
 test_mst_prim()
