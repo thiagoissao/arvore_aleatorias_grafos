@@ -65,6 +65,9 @@ const mst_kruskal = (G, w) => {
             union(arestaOrdenada[i][1], arestaOrdenada[i][2], G)
         }
     }
+    console.log("OLHA O A AQUI")
+    console.log(A)
+    console.log()
     return A
 }
 
@@ -104,33 +107,33 @@ const kruskal_graph_test = () => {
         [2, 6, 7]
     ]
 
-//RETORNA um vetor com as arestas u,v
-/*
-    Ex: [
-        [u0, v0],
-        [u1, v1],
-        [u2, v2],
-        ...
-    ]
+    //RETORNA um vetor com as arestas u,v
+    /*
+        Ex: [
+            [u0, v0],
+            [u1, v1],
+            [u2, v2],
+            ...
+        ]
 
-*/
-const A = mst_kruskal(G, w)                     
-    assert (A[0][0] == 7)
-    assert (A[0][1] == 6)
-    assert (A[1][0] == 6)
-    assert (A[1][1] == 5)
-    assert (A[2][0] == 8)
-    assert (A[2][1] == 2)
-    assert (A[3][0] == 1)
-    assert (A[3][1] == 0)
-    assert (A[4][0] == 5)
-    assert (A[4][1] == 2)
-    assert (A[5][0] == 3)
-    assert (A[5][1] == 2)
-    assert (A[6][0] == 2)
-    assert (A[6][1] == 1)
-    assert (A[7][0] == 4)
-    assert (A[7][1] == 3)      
+    */
+    const A = mst_kruskal(G, w)                     
+        assert (A[0][0] == 7)
+        assert (A[0][1] == 6)
+        assert (A[1][0] == 6)
+        assert (A[1][1] == 5)
+        assert (A[2][0] == 8)
+        assert (A[2][1] == 2)
+        assert (A[3][0] == 1)
+        assert (A[3][1] == 0)
+        assert (A[4][0] == 5)
+        assert (A[4][1] == 2)
+        assert (A[5][0] == 3)
+        assert (A[5][1] == 2)
+        assert (A[6][0] == 2)
+        assert (A[6][1] == 1)
+        assert (A[7][0] == 4)
+        assert (A[7][1] == 3)      
 }
 
 const createEdges = (current, n) => {

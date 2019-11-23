@@ -132,8 +132,7 @@ const eh_arvore = G => {
     if(arestas != (G.length - 1)){
         return false
     }
-    const s = Math.floor(Math.random() * (G.length - 1))
-    const aux = bfs(G, s)
+    const aux = bfs(G, 0)
     for(let i = 0; i < G.length; i ++){
         if(aux[i] === Number.POSITIVE_INFINITY)
             return false
