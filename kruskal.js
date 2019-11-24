@@ -32,19 +32,6 @@ const mst_kruskal = (G, w) => {
     let A = []
     Object.keys(G).forEach( v => G[v] = make_set(v, G[v]))
     const wTemp = Object.assign({}, w) 
-    Object.keys(w).forEach( v => {
-        w[v].sort((a,b) => {
-            if(b < a){
-                const iA = wTemp[v].indexOf(a)
-                let iB = wTemp[v].indexOf(b)
-                iB = iB == -1 ? iA + 1 : iB
-                const aux = G[v].E[iB]
-                G[v].E[iB] = G[v].E[iA]
-                G[v].E[iA] = aux
-            }
-           return a - b
-        })
-    })
     let arestaOrdenada = []
     Object.keys(G).forEach(u => {
         G[u].E.forEach(v => {
@@ -54,11 +41,10 @@ const mst_kruskal = (G, w) => {
             }
         })
     })
-    
+    console.log(arestaOrdenada)
     arestaOrdenada.sort((a,b) => {
         return a[0] - b[0]
     })
-
     for(let i = 0; i < arestaOrdenada.length; i ++){
         if(find_set(G, arestaOrdenada[i][1]) != find_set(G, arestaOrdenada[i][2])){
             A.push([arestaOrdenada[i][1], arestaOrdenada[i][2]])
@@ -112,7 +98,7 @@ const kruskal_graph_test = () => {
         Ex: [
             [u0, v0],
             [u1, v1],
-            [u2, v2],
+         =   [u2, v2],
             ...
         ]
 
@@ -160,10 +146,10 @@ const randomTreeKruskal = n => {
     console.log(G)
     return mst_kruskal(G, w)
 }
-console.log("randomTreeKruskal -> n = 5: ")
-console.log(randomTreeKruskal(5))
+// console.log("randomTreeKruskal -> n = 5: ")
+// console.log(randomTreeKruskal(5))
 
-console.log("\nrandomTreeKruskal -> n = 10")
-console.log(randomTreeKruskal(10))
+// console.log("\nrandomTreeKruskal -> n = 10")
+// console.log(randomTreeKruskal(10))
 
 kruskal_graph_test()

@@ -241,6 +241,16 @@ const teste_arvore = () => {
     })
 }
 
+
+
+
+//AQUI COMECA PRIM
+//-----------------------
+//-----------------------
+//-----------------------
+//-----------------------
+//-----------------------
+
 const teste_arvore_prim = () => {
     const n = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
     n.forEach(number => {
@@ -254,15 +264,6 @@ const teste_arvore_prim = () => {
         console.log(number + ' ' + media)
     })
 }
-
-
-
-//AQUI COMECA PRIM
-//-----------------------
-//-----------------------
-//-----------------------
-//-----------------------
-//-----------------------
 
 const extract_min = (Q, G) => {
     let menor = Number.POSITIVE_INFINITY
@@ -288,15 +289,17 @@ const mst_prim = (G, w, r) => {
         G[u] = {
             adj: G[u],
             chave: Number.POSITIVE_INFINITY,
-            pi: null
-        }
+            pi: null,
+            pertenceQ: true
+        }   
     })
     G[r].chave = 0
     let Q = Object.keys(G)
     while(Q.length != 0){
         const u = extract_min(Q, G)
+        G[u].pertenceQ = false
         G[u].adj.forEach((v, index) => {
-            if(belongsTo(v, Q) && w[u][index] < G[v].chave){
+            if(G[v].pertenceQ === true && w[u][index] < G[v].chave){
                 G[v].pi = u
                 G[v].chave = w[u][index]
             }
@@ -304,7 +307,7 @@ const mst_prim = (G, w, r) => {
     }
     let A = []
     for(let i = 0; i<G.length; i++) A[i] = []
-    G.map( (v, index) => {
+    G.forEach( (v, index) => {
         if(v.pi != null){
             A[v.pi].push(index) 
             A[index].push(Number(v.pi))
@@ -371,8 +374,8 @@ const test_mst_prim = () => {
         [8, 11, 7, 1],
         [2, 6, 7]
     ]
-    // console.log(mst_prim(G, w, 0))
-    console.log(mst_prim(G, w, Math.round(Math.random()*(w.length - 1))))
+    console.log(mst_prim(G, w, 0))
+    // console.log(mst_prim(G, w, Math.round(Math.random()*(w.length - 1))))
 }
 
 
@@ -382,5 +385,5 @@ const test_mst_prim = () => {
 // teste_bfs()
 // teste_diametro()
 // teste_aresta()
-// test_mst_prim()
-teste_arvore_prim()
+test_mst_prim()
+//  teste_arvore_prim()
