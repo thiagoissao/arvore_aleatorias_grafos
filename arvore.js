@@ -229,53 +229,62 @@ const eh_arvore = G => {
 }
 
 //AQUI COMECA PRIM
-const extract_min = (Q, G) => {
+const extract_min = (Q, key, visit) => {
+    let aux = key
+    // console.log(key)
+    let i = 0
     let menor = Number.POSITIVE_INFINITY
-    let index = -1
-    Q.forEach( (v, i) => {
-        if(G[v].chave < menor ){
-            menor = v
-            index = i
+    // console. log(aux)
+    while(i < aux.length){
+        Q.forEach( (v, i) => {
+            if(key[v] < menor ){
+                menor = v
+            }
+        })
+        let onde = menor
+        // console.log(onde)
+        if(visit[onde] == -1){
+            return onde
         }
-    })
-    Q.splice(index, 1)
-    return menor
+        i++
+        aux[onde] = Number.POSITIVE_INFINITY
+    }
 }
 
 const mst_prim = (G, w, r) => {
+    let key = [], parent = [], visit = []
     Object.keys(G).forEach(u => {
         G[u] = {
             adj: G[u],
-            chave: Number.POSITIVE_INFINITY,
-            pi: null,
-            pertenceQ: true
+        //     chave: Number.POSITIVE_INFINITY,
+        //     pi: null,
+        //     pertenceQ: true
         }   
+        key[u] = Number.POSITIVE_INFINITY
+        parent[u] = -1
+        visit[u] = -1
     })
-    G[r].chave = 0
+    key[r] = 0
+    // G[r].chave = 0
     let Q = Object.keys(G)
     let A = []
     for(let i = 0; i<G.length; i++) A[i] = []
     while(Q.length != 0){
-        const u = extract_min(Q, G)
-        G[u].pertenceQ = false
-        if(G[u].pi != null){
-            A[G[u].pi].push(Number(u))
-            A[u].push(Number(G[u].pi))
+        const u = extract_min(Q, key, visit)
+        Q.splice(Q.indexOf(u), 1)
+        visit[u] = 0
+        console.log(parent[u])
+        if(parent[u] != -1){
+            A[parent[u]].push(Number(u))
+            A[u].push(parent[u])
         }
-        G[u].adj.forEach((v, index) => {
-            if(G[v].pertenceQ === true && w[u][index] < G[v].chave){
-                G[v].pi = u
-                G[v].chave = w[u][index]
+        G[u].adj.forEach((v) => {
+            if(visit[v] == -1 && w[u][v] < key[v]){
+                parent[v] = u
+                key[v] = w[u][v]
             }
         })
     }
-    // G.forEach( (v, index) => {
-    //     if(v.pi != null){
-    //         A[v.pi].push(index) 
-    //         A[index].push(Number(v.pi))
-    //     }
-    // })
-    // console.log(A)
     return A
 }
 
@@ -466,7 +475,7 @@ const teste_arvore = randomTree => {
 }
 /* TESTES */
 
-teste_arvore(random_tree_prim)
+// teste_arvore(random_tree_prim)
 // teste_arvore(random_tree_kruskal)
 // teste_arvore(random_tree_random_walk)
 
@@ -474,4 +483,4 @@ teste_arvore(random_tree_prim)
 // teste_diametro()
 // teste_aresta()
 // teste_mst_kruskal()
-// teste_mst_prim()
+teste_mst_prim()
