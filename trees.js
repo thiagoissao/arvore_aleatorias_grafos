@@ -1,3 +1,8 @@
+/* 
+    Thiago Issao Yasunaka           RA:103069
+    Otávio Hideki Gonçalves Kochi   RA:107635
+*/
+
 const assert = require('assert') 
 const BRANCO = 'branco'
 const CINZA = 'cinza'
@@ -74,36 +79,36 @@ const teste_diametro = () => {
 
 
 const bfs = (G, s) => {
-    let GAux = Object.assign({}, G)
-    Object.keys(GAux).forEach( index => {
+    let grafo = Object.assign({}, G)
+    Object.keys(grafo).forEach( index => {
         let adj = G[index]
-        GAux[index] = {
+        grafo[index] = {
             'd': Number.POSITIVE_INFINITY,
             'pi': null,
             'cor': BRANCO,
             'adj':  adj
         }
     })
-    GAux[s].d = 0
-    GAux[s].pi = null
-    GAux[s].cor = CINZA
+    grafo[s].d = 0
+    grafo[s].pi = null
+    grafo[s].cor = CINZA
     let fila = [] //Inicialização da fila
-    fila.push(GAux[s])
+    fila.push(grafo[s])
     indexU = 0
     while (indexU != G.length) {
         let u = fila[indexU]
         indexU++
         u.adj.forEach( v => {
-            if(GAux[v].cor === BRANCO) {
-                GAux[v].d = u.d + 1
-                GAux[v].pi = G.indexOf(u.adj)
-                GAux[v].cor = CINZA
-                fila.push(GAux[v])
+            if(grafo[v].cor === BRANCO) {
+                grafo[v].d = u.d + 1
+                grafo[v].pi = G.indexOf(u.adj)
+                grafo[v].cor = CINZA
+                fila.push(grafo[v])
             }
         }) 
         u.cor = PRETO
     }
-    return Object.keys(GAux).map(index => GAux[index].d)
+    return Object.keys(grafo).map(index => grafo[index].d)
 }
 
 const teste_bfs = () => {
@@ -195,24 +200,24 @@ const teste_aresta = () => {
 }
 
 const random_tree_random_walk = n => {
-    let GAux = Object.assign({}, Array.apply(null, Array(n)))
-    Object.keys(GAux).forEach((index) => {
-        GAux[index] = {visitado: false, adj:Array()}
+    let grafo = Object.assign({}, Array.apply(null, Array(n)))
+    Object.keys(grafo).forEach((index) => {
+        grafo[index] = {visitado: false, adj:Array()}
     })
     let u = Math.round(Math.random() * (n - 1))
-    GAux[u].visitado = true
+    grafo[u].visitado = true
     let arestas = 0
     while( arestas < n - 1){
         let v = Math.round(Math.random() * (n -1))
-        if(!GAux[v].visitado){
-            GAux[v].adj.push(u)
-            GAux[u].adj.push(v)
-            GAux[v].visitado = true
+        if(!grafo[v].visitado){
+            grafo[v].adj.push(u)
+            grafo[u].adj.push(v)
+            grafo[v].visitado = true
             arestas++
         }
         u = v
     }
-    return Object.keys(GAux).map(index => GAux[index].adj)
+    return Object.keys(grafo).map(index => grafo[index].adj)
 }
 
 const eh_arvore = G => {
@@ -220,9 +225,9 @@ const eh_arvore = G => {
     if(arestas != (G.length - 1)){
         return false
     }
-    const aux = bfs(G, 0)
+    const distancias = bfs(G, 0)
     for(let i = 0; i < G.length; i ++){
-        if(aux[i] === Number.POSITIVE_INFINITY)
+        if(distancias[i] === Number.POSITIVE_INFINITY)
             return false
     }
     return true
@@ -232,14 +237,16 @@ const eh_arvore = G => {
 const extract_min = (Q, G) => {
     let menor = Number.POSITIVE_INFINITY
     let index = -1
+    let vertice
     Q.forEach( (v, i) => {
         if(G[v].chave < menor ){
-            menor = v
+            menor = G[v].chave
             index = i
+            vertice = v
         }
     })
     Q.splice(index, 1)
-    return menor
+    return vertice
 }
 
 const mst_prim = (G, w, r) => {
@@ -269,13 +276,6 @@ const mst_prim = (G, w, r) => {
             }
         })
     }
-    // G.forEach( (v, index) => {
-    //     if(v.pi != null){
-    //         A[v.pi].push(index) 
-    //         A[index].push(Number(v.pi))
-    //     }
-    // })
-    // console.log(A)
     return A
 }
 
@@ -465,10 +465,12 @@ const teste_arvore = randomTree => {
     })
 }
 /* TESTES */
-
+console.log("Rodando Walk")
+teste_arvore(random_tree_random_walk)
+console.log("Rodando Prim")
 teste_arvore(random_tree_prim)
-// teste_arvore(random_tree_kruskal)
-// teste_arvore(random_tree_random_walk)
+console.log("Rodando Kruskal")
+teste_arvore(random_tree_kruskal)
 
 // teste_bfs()
 // teste_diametro()
