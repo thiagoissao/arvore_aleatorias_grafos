@@ -13,7 +13,7 @@ def main():
     if alg == 'randomwalk':
         fun = lambda x, a: a * np.power(x, 1/2)
         p = r'$\times \sqrt{n}$'
-    elif alg == 'kruskal' or alg == 'prim':
+    elif alg == 'randomkruskal' or alg == 'randomprim':
         fun = lambda x, a: a * np.power(x, 1/3)
         p = r'$\times \sqrt[3]{n}$'
     else:

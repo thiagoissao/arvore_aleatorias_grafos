@@ -2,6 +2,7 @@ const assert = require('assert')
 const BRANCO = 'branco'
 const CINZA = 'cinza'
 const PRETO = 'preto'
+const NUMBER_TESTS = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
 
 const r = 0
 const s = 1
@@ -227,8 +228,8 @@ const eh_arvore = G => {
     return true
 }
 
-const teste_arvore = () => {
-    const n = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
+const teste_arvore_random_walk = () => {
+    const n = NUMBER_TESTS
     n.forEach(number => {
         let soma_diametro = 0
         for(let i=0; i<500; i++) {
@@ -241,18 +242,9 @@ const teste_arvore = () => {
     })
 }
 
-
-
-
 //AQUI COMECA PRIM
-//-----------------------
-//-----------------------
-//-----------------------
-//-----------------------
-//-----------------------
-
 const teste_arvore_prim = () => {
-    const n = [250, 500, 750, 1000, 1250, 1500, 1750, 2000]
+    const n = NUMBER_TESTS
     n.forEach(number => {
         let soma_diametro = 0
         for(let i=0; i<500; i++) {
@@ -276,12 +268,6 @@ const extract_min = (Q, G) => {
     })
     Q.splice(index, 1)
     return menor
-}
-
-const belongsTo = (v, Q) => {
-    for(let i=0; i<Q.length; i++)
-        if(Q[i] == v) return true
-    return false
 }
 
 const mst_prim = (G, w, r) => {
@@ -340,16 +326,101 @@ const random_tree_prim = n => {
 }
 
 
-const test_mst_prim = () => {
-    const a = 0
-    const b = 1
-    const c = 2
-    const d = 3
-    const e = 4
-    const f = 5
-    const g = 6
-    const h = 7
-    const i = 8
+const teste_mst_prim = () => {
+    const G = [
+        [b, h],         //a
+        [a, c, h],      //b
+        [b, d, i ,f],   //c
+        [c, e, f],      //d
+        [d, f],         //e
+        [c, d, e, g],   //f
+        [f, i, h],      //g
+        [a, b, i, g],   //h
+        [c, g, h],      //i
+    ]
+
+    const w = [
+        [4, 8],
+        [4, 8, 11],
+        [8, 7, 2, 4],
+        [7, 9, 14],
+        [9, 10],
+        [4, 14, 10, 2],
+        [2, 6, 1],
+        [8, 11, 7, 1],
+        [2, 6, 7]
+    ]
+    const t = mst_prim(G, w, Math.round(Math.random()*(w.length - 1)))
+    assert(t[0].includes(1) || (t[0].includes(1) && t[0].includes(0)))
+    assert((t[1].includes(2) && t[1].includes(0)) || t[1].includes(0))
+    assert((t[2].includes(1) && t[2].includes(3) && t[2].includes(5) && t[2].includes(8)) || (t[2].includes(3) && t[2].includes(8)))
+    assert(t[3].includes(2) && t[3].includes(4))
+    assert(t[4].includes(3))
+    assert(t[5].includes(6) || (t[5].includes(2) && t[5].includes(6)))
+    assert((t[6].includes(5) && t[6].includes(7) && t[6].includes(8)) || (t[6].includes(5) && t[6].includes(7)))
+    assert((t[7].includes(0) && t[7].includes(6)) || t[7].includes(6))
+    assert((t[3].includes(2) && t[7].includes(6)) || t[3].includes(2))
+}
+
+
+// AQUI COMECA O KRUSKAL
+const make_set = (v, adj) => {
+    return {
+        E: adj,
+        rank: 0,
+        p: v
+    }
+}
+
+const union = (x, y, G) => {
+    link(find_set(G, x), find_set(G, y), G)
+}
+
+const find_set = (G,v) => {
+    if(v != G[v].p) G[v].p = find_set(G, G[v].p)
+    return G[v].p
+}
+
+const link = (x, y, G) => {
+    if(G[x].rank  > G[y].rank){
+        G[y].p = x
+    } else{
+        G[x].p = y
+        if(G[x].rank == G[y].rank){
+            G[y].rank += 1
+        }
+    }
+}
+
+const mst_kruskal = (G, w) => {
+    let A = Array(G.length)
+    for(let i = 0; i<G.length; i++){
+        A[i] = []
+    }
+    Object.keys(G).forEach( v => G[v] = make_set(v, G[v]))
+    let arestaOrdenada = []
+    Object.keys(G).forEach(u => {
+        G[u].E.forEach(v => {
+            u = parseInt(u)
+            if(u > v){
+                arestaOrdenada.push([w[u][G[u].E.indexOf(v)], u, v])
+            }
+        })
+    })
+    arestaOrdenada.sort((a,b) => {
+        return a[0] - b[0]
+    })
+    for(let i = 0; i < arestaOrdenada.length; i ++){
+        if(find_set(G, arestaOrdenada[i][1]) != find_set(G, arestaOrdenada[i][2])){
+            A[[arestaOrdenada[i][1]]].push(arestaOrdenada[i][2])
+            A[[arestaOrdenada[i][2]]].push(arestaOrdenada[i][1])
+            union(arestaOrdenada[i][1], arestaOrdenada[i][2], G)
+        }
+    }
+    return A
+}
+
+const teste_mst_kruskal = () => {
     
     const G = [
         [b, h],         //a
@@ -374,16 +445,56 @@ const test_mst_prim = () => {
         [8, 11, 7, 1],
         [2, 6, 7]
     ]
-    console.log(mst_prim(G, w, 0))
-    // console.log(mst_prim(G, w, Math.round(Math.random()*(w.length - 1))))
+    const A = mst_kruskal(G, w)                     
+        assert (A[0][0] == 1)
+        assert (A[1][0] == 0)
+        assert (A[1][1] == 2)
+        assert (A[2][0] == 8)
+        assert (A[2][1] == 5)
+        assert (A[2][2] == 3)
+        assert (A[2][3] == 1)
+        assert (A[3][0] == 2)
+        assert (A[3][1] == 4)
+        assert (A[4][0] == 3)
+        assert (A[5][0] == 6)
+        assert (A[5][1] == 2)
+        assert (A[6][0] == 7)
+        assert (A[6][1] == 5)
+        assert (A[7][0] == 6)
+        assert (A[8][0] == 2)      
 }
 
+const random_tree_kruskal = n => {
+    const G = Array(n).fill(null)
+    G.forEach((element,i) => G[i] = createEdges(i, n))
 
+    const w = Array(n).fill(null)
+    w.forEach((element, i) => w[i] = createWeights(n))
 
+    return mst_kruskal(G, w)
+}
 
+const teste_arvore_kruskal = () => {
+    const n = NUMBER_TESTS
+    n.forEach(number => {
+        let soma_diametro = 0
+        for(let i=0; i<500; i++) {
+            let G = random_tree_kruskal(number)
+            assert(eh_arvore(G))
+            soma_diametro = soma_diametro + diametro(G)
+        }
+        let media = soma_diametro/500
+        console.log(number + ' ' + media)
+    })
+}
+
+/* TESTES */
 
 // teste_bfs()
 // teste_diametro()
 // teste_aresta()
-test_mst_prim()
-//  teste_arvore_prim()
+// teste_arvore_random_walk()
+// teste_mst_kruskal()
+// teste_arvore_kruskal()
+// teste_mst_prim()
+// teste_arvore_prim()
